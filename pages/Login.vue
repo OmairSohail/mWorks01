@@ -36,6 +36,7 @@ import LoggedoutNavbar from '../components/LoggedoutNavbar'
 //import {auth} from '../config/firebaseinit'
 import firebase from 'firebase/app'
 import Swal from 'sweetalert2'
+import { async } from 'q'
 export default {
     data(){
         return{
@@ -90,8 +91,7 @@ export default {
             provider.setCustomParameters({
             'login_hint': 'user@example.com'
             });
-            
-            firebase.auth().signInWithRedirect(provider);
+            firebase.auth().signInWithRedirect(provider)
             firebase.auth().getRedirectResult().then(function(result) {
                 if (result.credential) {
                     // This gives you a Google Access Token. You can use it to access the Google API.
@@ -100,6 +100,7 @@ export default {
                 }
                 // The signed-in user info.
                 var user = result.user;
+                
                 }).catch(function(error) {
                 // Handle Errors here.
                 var errorCode = error.code;
@@ -110,6 +111,15 @@ export default {
                 var credential = error.credential;
                 // ...
                 });
+            firebase.auth().onAuthStateChanged((user)=>{
+              if(user)
+              {
+                  this.$router.push('/Success')
+              }else
+              {
+                 this.$router.push('/Login')
+              }
+            })   
         }
     }
 }
