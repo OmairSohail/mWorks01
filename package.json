@@ -11,8 +11,16 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "child_process": "^1.0.2",
+    "dns": "^0.2.2",
+    "firebase": "^7.6.1",
+    "fs": "0.0.1-security",
+    "http2": "^3.3.7",
+    "net": "^1.0.2",
     "nuxt": "^2.0.0",
-    "nuxt-buefy": "^0.3.2"
+    "nuxt-buefy": "^0.3.2",
+    "sweetalert2": "^9.5.3",
+    "tls": "0.0.1"
   },
   "devDependencies": {}
 }

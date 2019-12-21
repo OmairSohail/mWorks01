@@ -23,6 +23,9 @@
             {{message}}
         </b-notification>
         </b-field>
+        <b-field>
+            <button class="button is-rounded" @click="signinwithgoogle">Signin With google</button>
+        </b-field>
 </section>
 
 </div>    
@@ -30,7 +33,8 @@
 
 <script>
 import LoggedoutNavbar from '../components/LoggedoutNavbar'
-import {auth} from '../config/firebaseinit'
+//import {auth} from '../config/firebaseinit'
+import firebase from 'firebase/app'
 import Swal from 'sweetalert2'
 export default {
     data(){
@@ -66,7 +70,7 @@ export default {
              }).catch((error)=>{
                 var errorCode = error.code;
                 var errorMessage = error.message;
-                this.message = errorMessage
+                this.message = errorMessage;
                 this.isActive = true;
 
              })
@@ -75,6 +79,37 @@ export default {
                 this.message = 'Please Fill in All The Fields'
                 this.isActive = true;
            }
+        },
+        signinwithgoogle(){
+            var provider = new firebase.auth.GoogleAuthProvider();
+           
+            provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+            firebase.auth().useDeviceLanguage();
+            // To apply the default browser preference instead of explicitly setting it.
+            // firebase.auth().useDeviceLanguage();
+            provider.setCustomParameters({
+            'login_hint': 'user@example.com'
+            });
+            
+            firebase.auth().signInWithRedirect(provider);
+            firebase.auth().getRedirectResult().then(function(result) {
+                if (result.credential) {
+                    // This gives you a Google Access Token. You can use it to access the Google API.
+                    var token = result.credential.accessToken;
+                    // ...
+                }
+                // The signed-in user info.
+                var user = result.user;
+                }).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // The email of the user's account used.
+                var email = error.email;
+                // The firebase.auth.AuthCredential type that was used.
+                var credential = error.credential;
+                // ...
+                });
         }
     }
 }
@@ -83,7 +118,7 @@ export default {
 <style scoped>
 .logincard{
     width:500px;
-    height:300px;
+    height:350px;
     position:absolute;
     top:50%;
     left:50%;
